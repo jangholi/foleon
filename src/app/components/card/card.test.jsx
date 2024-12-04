@@ -23,20 +23,20 @@ describe("PublicationCard", () => {
   test("renders the PublicationCard with correct content", () => {
     render(<PublicationCard {...mockProps} />);
     const imageElement = screen.getByAltText(
-      `Cover image for ${mockProps.publication.name}`,
+      `Cover image for ${mockProps.publication.name}`
     );
 
     expect(imageElement).toBeInTheDocument();
     expect(imageElement).toHaveAttribute(
       "src",
-      mockProps.publication._embedded.screenshot._links.desktop.href,
+      mockProps.publication._embedded.screenshot._links.desktop.href
     );
 
     const titleElement = screen.getByText(mockProps.publication.name);
     expect(titleElement).toBeInTheDocument();
 
     const publishTimeElement = screen.getByText(
-      `Created at: ${mockProps.publication.created_on}`,
+      `Created at: ${mockProps.publication.created_on}`
     );
     expect(publishTimeElement).toBeInTheDocument();
   });
@@ -48,8 +48,8 @@ describe("PublicationCard", () => {
     expect(cardElement).toBeInTheDocument();
 
     expect(cardElement).toHaveAttribute(
-      "aria-labelledby",
-      `card-title-${mockProps.publication.name}`,
+      "aria-label",
+      `card-title-${mockProps.publication.name}`
     );
   });
 });

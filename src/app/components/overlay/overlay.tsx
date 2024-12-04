@@ -21,8 +21,10 @@ const OverlayContent = styled.div`
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
-  max-width: 400px;
   width: 100%;
+  max-width: 400px;
+  max-height: 100%;
+  overflow-x: scroll;
   cursor: default;
 `;
 
@@ -32,24 +34,32 @@ interface OverlayProps {
   onCloseOverlay: () => void;
 }
 
-export default function Overlay(props: OverlayProps): JSX.Element {
+const Overlay: React.FC<OverlayProps> = ({
+  children,
+  isVisible,
+  onCloseOverlay,
+}) => {
   const handleContainerClick = () => {
-    props.onCloseOverlay(); // emit close event by clicking on container
+    onCloseOverlay();
   };
 
-  return props.isVisible ? (
+  if (!isVisible) {
+    return;
+  }
+
+  return (
     <OverlayContainer
-      isVisible={props.isVisible}
+      isVisible={isVisible}
       role="dialog"
       aria-modal="true"
-      aria-hidden={!props.isVisible}
+      aria-hidden={!isVisible}
       onClick={handleContainerClick}
     >
       <OverlayContent onClick={(e) => e.stopPropagation()}>
-        {props.children}
+        {children}
       </OverlayContent>
     </OverlayContainer>
-  ) : (
-    <Fragment></Fragment>
   );
-}
+};
+
+export default Overlay;

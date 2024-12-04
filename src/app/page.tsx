@@ -3,7 +3,7 @@
 import styled from "styled-components";
 import { useState, useEffect, useMemo } from "react";
 import "../../public/styles/colors.css";
-import Logo from "./components/icons/logo";
+import Logo from "./components/logo/logo";
 import Search from "./components/search/search";
 import Select from "./components/select/select";
 import Card from "./components/card/card";
@@ -12,6 +12,7 @@ import { fetchPublications, APIPublication } from "./api/publication";
 import { APIPagination } from "./api/types";
 import Pagination from "./components/pagination/pagination";
 import { createGlobalStyle } from "styled-components";
+import Loading from "./components/loading/loading";
 
 // Define global styles
 const GlobalStyle = createGlobalStyle`
@@ -29,7 +30,6 @@ const FlexContainer = styled.div`
 const FlexItem = styled.div`
   padding: 20px;
   border-bottom: 2px solid var(--color-divider);
-  grid-template-columns: repeat(12, 1fr);
 
   &:last-child {
     border: 0;
@@ -158,7 +158,7 @@ export default function Home() {
   }, [project, search, category, page]);
 
   // Projects select items
-  const projectsSelect = useMemo(() => {
+  const projectsList = useMemo(() => {
     return [
       { label: "All projects", value: "" },
       ...(projects || []).map((project) => ({
@@ -169,11 +169,11 @@ export default function Home() {
   }, [projects]);
 
   // Categories select items (available in results)
-  const categoriesSelect = useMemo(() => {
+  const categoriesList = useMemo(() => {
     const allCategories = Array.from(
       new Set(
-        publications?.publications.map((publication) => publication.category),
-      ),
+        publications?.publications.map((publication) => publication.category)
+      )
     ).sort();
     return [
       { label: "All categories", value: "" },
@@ -196,7 +196,7 @@ export default function Home() {
           <SearchContainer>
             <Search
               onSearch={(search) => setSearch(search)}
-              disabled={!projects?.length || loading}
+              disabled={loading}
             />
           </SearchContainer>
         </Container>
@@ -207,8 +207,8 @@ export default function Home() {
           <SelectContainer>
             <Select
               ariaLabel="Select a project"
-              items={projectsSelect}
-              disabled={!projects?.length || loading}
+              items={projectsList}
+              disabled={loading}
               onChange={(value) => {
                 setproject(+value);
                 setCategory(undefined);
@@ -218,8 +218,8 @@ export default function Home() {
           <SelectContainer>
             <Select
               ariaLabel="Select a category"
-              items={categoriesSelect}
-              disabled={!projects?.length || loading}
+              items={categoriesList}
+              disabled={loading}
               onChange={(selectedCategory) =>
                 setCategory(selectedCategory + "")
               }
@@ -234,22 +234,28 @@ export default function Home() {
         </Container>
       </HeadingContainer>
 
-      <CardContainer>
-        {publications?.publications.length
-          ? publications.publications.map((item) => (
-              <Card key={item.id} publication={item} />
-            ))
-          : !loading && "No results!"}
-      </CardContainer>
+      {loading ? (
+        <Loading />
+      ) : (
+        <CardContainer>
+          {publications?.publications.length
+            ? publications.publications.map((item) => (
+                <Card key={item.id} publication={item} />
+              ))
+            : "No results!"}
+        </CardContainer>
+      )}
 
       <FlexItem>
         <PaginationContainer>
-          {publications?.pagination && (
+          {publications?.pagination?.total ? (
             <Pagination
               totalPages={publications.pagination.page_count}
               currentPage={publications.pagination.page}
               onPageChange={(page) => setPage(page)}
             />
+          ) : (
+            ""
           )}
         </PaginationContainer>
       </FlexItem>

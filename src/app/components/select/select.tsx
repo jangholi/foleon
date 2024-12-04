@@ -35,27 +35,34 @@ interface SelectProps {
   disabled?: boolean;
 }
 
-export default function Select(props: SelectProps): JSX.Element {
+const Select: React.FC<SelectProps> = ({
+  disabled,
+  onChange,
+  items,
+  ariaLabel,
+}) => {
   const [selectedItem, setSelectedItem] = useState<string>();
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = e.target.value;
     setSelectedItem(newValue);
-    props?.onChange(newValue); // Emit the selected value
+    onChange(newValue); // Emit the selected value
   };
 
   return (
     <SelectBox
       value={selectedItem}
       onChange={handleChange}
-      disabled={props.disabled}
-      aria-label={props.ariaLabel}
+      disabled={disabled}
+      aria-label={ariaLabel}
     >
-      {props.items?.map((item) => (
+      {items?.map((item) => (
         <Option value={item.value} key={item.label}>
           {item.label}
         </Option>
       ))}
     </SelectBox>
   );
-}
+};
+
+export default Select;

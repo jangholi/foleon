@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, KeyboardEvent } from "react";
 import styled from "styled-components";
 
@@ -14,7 +13,7 @@ const SearchBar = styled.div`
   &:focus-within {
     color: var(--color-secondary);
     border-color: var(--color-secondary);
-    box-shadow: 0 0 4px var(--color-secondary); /* Optional: Add shadow for emphasis */
+    box-shadow: 0 0 4px var(--color-secondary);
   }
 `;
 
@@ -29,18 +28,15 @@ const SearchInput = styled.input`
 
 interface InputProps {
   disabled?: boolean;
-  onSearch: (searchTerm: string) => void; // TODO: Define the type for the onSearch callback
+  onSearch: (searchTerm: string) => void;
 }
 
-export default function Search({
-  onSearch,
-  disabled,
-}: InputProps): JSX.Element {
+const Search: React.FC<InputProps> = ({ onSearch, disabled }) => {
   const [inputVal, setInputVal] = useState<string>("");
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>): void => {
     if (!disabled && event.key === "Enter") {
-      onSearch(inputVal); // Emit the event and send the input data
+      onSearch(inputVal);
     }
   };
 
@@ -67,8 +63,10 @@ export default function Search({
         aria-describedby="search-instructions"
       />
       <span id="search-instructions" style={{ display: "none" }}>
-        Type your search term and press Enter to search.
+        Type your search term and press Enter to find publication.
       </span>
     </SearchBar>
   );
-}
+};
+
+export default Search;

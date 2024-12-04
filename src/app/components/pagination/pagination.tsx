@@ -1,5 +1,4 @@
 "use client";
-
 import styled from "styled-components";
 
 const PaginationContainer = styled.nav`
@@ -29,17 +28,13 @@ const PaginationItem = styled.li`
 `;
 
 const PaginationLink = styled.a`
-  display: inline-block;
   padding: 10px 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  text-decoration: none;
-  color: var(--color-primary);
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: #f1f1f1;
-    color: #0056b3;
+    background-color: var(--color-light-gray);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
 
@@ -56,12 +51,11 @@ interface PaginationProps {
   onPageChange: (id: number) => void;
 }
 
-// Pagination Component
-const Pagination = ({
+const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   currentPage,
   onPageChange,
-}: PaginationProps) => {
+}) => {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (

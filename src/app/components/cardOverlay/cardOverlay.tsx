@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Overlay from "../overlay/overlay";
 import styled from "styled-components";
 import type { APIPublication } from "../../api/publication";
@@ -18,12 +18,12 @@ const CardHeading = styled.h2`
 
 const CardDetail = styled.p`
   font-size: 1rem;
-  color: #555;
+  color: var(--color-dark-gray);
   margin: 5px 0;
 
   span {
     font-weight: bold;
-    color: #000;
+    color: black;
   }
 `;
 
@@ -48,12 +48,15 @@ interface CardOverlayProps {
   publication: APIPublication;
 }
 
-export default function CardOverlay({
+const CardOverlay: React.FC<CardOverlayProps> = ({
   publication,
   onCloseCardOverlay,
   isVisible,
-}: CardOverlayProps): JSX.Element {
+}) => {
   const publishedLink = publication._links?.published?.href;
+  if (!isVisible) {
+    return;
+  }
   return (
     <Overlay isVisible={isVisible} onCloseOverlay={() => onCloseCardOverlay()}>
       <CardContainer>
@@ -82,4 +85,6 @@ export default function CardOverlay({
       </CardContainer>
     </Overlay>
   );
-}
+};
+
+export default CardOverlay;

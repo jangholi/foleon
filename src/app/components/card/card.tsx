@@ -7,16 +7,12 @@ const Card = styled.div`
   border-radius: 2px;
   overflow: hidden;
   font-family: Arial, sans-serif;
-  background-color: #fff;
-
-  &:focus-within {
-    outline: 2px solid #007bff;
-  }
+  background-color: white;
 `;
 
-const ImageWrapper = styled.div`
+const CardImageWrapper = styled.div`
   width: 100%;
-  height: 180px;
+  height: 200px;
   overflow: hidden;
 
   img {
@@ -27,14 +23,13 @@ const ImageWrapper = styled.div`
   }
 `;
 
-const Content = styled.div`
+const CardContent = styled.div`
   padding: 16px;
 `;
 
 const Title = styled.h3`
   font-size: 1.2rem;
   margin: 0 0 8px;
-  color: #333;
 `;
 
 const CreateTime = styled.p`
@@ -66,25 +61,25 @@ const PublicationCard: React.FC<PublicationCardProps> = ({ publication }) => {
   const [overlayVisibility, setOverlayVisibility] = useState<boolean>(false);
 
   return (
-    <Card role="article" aria-labelledby={`card-title-${publication.name}`}>
+    <Card role="article" aria-label={`card-title-${publication.name}`}>
       <CardOverlay
         isVisible={overlayVisibility}
         onCloseCardOverlay={() => setOverlayVisibility(false)}
         publication={publication}
       />
-      <ImageWrapper>
+      <CardImageWrapper>
         <img
           src={publication._embedded?.screenshot?._links?.desktop?.href}
           alt={`Cover image for ${publication.name}`}
         />
-      </ImageWrapper>
-      <Content>
-        <Title id={`card-title-${publication.name}`}>{publication.name}</Title>
+      </CardImageWrapper>
+      <CardContent>
+        <Title>{publication.name}</Title>
         <CreateTime>Created at: {publication.created_on}</CreateTime>
         <MoreInfo onClick={() => setOverlayVisibility(true)}>
           More info
         </MoreInfo>
-      </Content>
+      </CardContent>
     </Card>
   );
 };
