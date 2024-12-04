@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Overlay from "../overlay/overlay";
 import styled from "styled-components";
 import type { APIPublication } from "../../api/publication";
